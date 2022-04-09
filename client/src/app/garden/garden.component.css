@@ -1,13 +1,57 @@
 #garden {
     background-color: var(--theme-background);
     font-family: 'Roboto', sans-serif;
-    text-align: center;
     padding: 3%;
+}
+
+#garden-info {
+    margin-bottom: 2%;
+}
+mat-expansion-panel, .table, mat-paginator, mat-tab-group {
+    background-color: rgb(255, 255, 255);
+    width: 75%;
+    margin: 0.5% auto 0.5% auto;    
+    box-shadow: 1px 1px 5px #888888;
+}
+
+.contentSelect {
+    width: 30%;
+    margin-bottom: 25px;
+}
+/* ::ng-deep .mat-tab-label {
+    margin: auto;
+} */
+
+mat-tab-group {
+    padding: 5% 0% 5% 0%;
+}
+mat-tab {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.data, mat-tab-group {
+    text-align: center;
+}
+
+#comment {
+    text-align: justify;
+    text-justify: inter-word;
+}
+mat-panel-title, .data {
+    padding: 1%;
+}
+
+li {
+    list-style-type: none;
 }
 
 /* #parcel {
     border: 1px solid black;
 } */
+
 
 .divider {
     border-bottom: 1px solid var(--theme-blue);
@@ -16,10 +60,14 @@
     margin-bottom: 25px;
 }
 
+h1 {
+    text-align: center;
+}
+
 h2 {
     text-align: left;
     margin: 2% auto 2% auto;
-    width: 74%;
+    width: 75%;
     background-color: var(--theme-blue);
     
 }
