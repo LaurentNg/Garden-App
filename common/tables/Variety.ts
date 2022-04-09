@@ -10,4 +10,5 @@ export interface Variety {
     harvestPeriod: number;
     comments: string;
     version: string;
+    parcelCoords: string;
 }

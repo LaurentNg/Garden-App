@@ -25,7 +25,6 @@ export class DatabaseController {
       this.databaseService
         .getGardenInfos()
         .then((result: GardenInfo) => {
-          console.log(result);
           res.json(result);
         })
         .catch((e: Error) => {

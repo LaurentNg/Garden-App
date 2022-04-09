@@ -7,6 +7,7 @@ import { Parcel } from '../../../../common/tables/Parcel';
 import { CultivateRank } from '../../../../common/tables/CultivateRank';
 import { FallowRank } from '../../../../common/tables/FallowRank';
 import { Garden } from '../../../../common/tables/Garden';
+import { Variety } from '../../../../common/tables/Variety';
 
 
 
@@ -85,16 +86,16 @@ export class GardenComponent implements OnInit {
   // fallowRank = new MatTableDataSource<Rank>(ELEMENT_DATA2);
   // garden = new MatTableDataSource<Garden>(GARDEN);
 
+  garden: MatTableDataSource<Garden>;
   parcels: MatTableDataSource<Parcel>;
   cultivateRanks: MatTableDataSource<CultivateRank>;
   fallowRanks: MatTableDataSource<FallowRank>;
-  garden: MatTableDataSource<Garden>;
+  varieties: Variety[];
 
   constructor(private communicationService: CommunicationService) { }
 
   ngOnInit() {
     this.communicationService.getGardens().subscribe((gardenInfo: GardenInfo) => {
-      console.log(gardenInfo);
       this.gardenInfo = gardenInfo;
     });
   }
@@ -120,10 +121,15 @@ export class GardenComponent implements OnInit {
       return parcelCoordinates.includes(fallowRank.coordinates);
     });
 
+    const selectedVarieties = this.gardenInfo.varietyInfo.filter((variety: Variety) => {
+      return parcelCoordinates.includes(variety.parcelCoords);
+    });
+
     this.garden = new MatTableDataSource<Garden>(selectedGarden);
     this.parcels = new MatTableDataSource<Parcel>(selectedParcels);
     this.cultivateRanks = new MatTableDataSource<CultivateRank>(selectedCultivateRanks);
     this.fallowRanks = new MatTableDataSource<FallowRank>(selectedFallowRanks);
+    this.varieties = selectedVarieties;
     this.parcels.paginator = this.parcelPaginator;
     this.cultivateRanks.paginator = this.cultivateRankPaginator;
     this.fallowRanks.paginator = this.fallowRankPaginator;

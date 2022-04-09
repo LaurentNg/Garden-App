@@ -264,30 +264,30 @@
         </div>
       </mat-tab>
       <mat-tab label="Variétés de plantes">
-        <mat-accordion>
+        <div *ngFor="let variety of this.varieties">
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
-                Self aware panel
+                {{ variety.name }}
               </mat-panel-title>
             </mat-expansion-panel-header>
             <ul>
-              <li>Année de mise en marché :</li>
-              <li>Description pour le semis :</li>
-              <li>Plantation :</li>
-              <li>Entretien :</li>
-              <li>Récolte :</li>
-              <li>Période de mise en place :</li>
-              <li>Période de récolte :</li>
-              <li>Commentaires : <p id="comment">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p></li>
+              <li>Année de mise en marché : {{ variety.year }}</li>
+              <li>Description pour le semis : {{ variety.year }}</li>
+              <li>Plantation : {{ variety.plantation }}</li>
+              <li>Entretien : {{ variety.maintenance }}</li>
+              <li>Récolte : {{ variety.harvest }}</li>
+              <li>Période de mise en place : {{ variety.plantationPeriod }}</li>
+              <li>Période de récolte : {{ variety.harvestPeriod }}</li>
+              <li>Version : {{ variety.version }}</li>
+              <li>Commentaires : {{ variety.comments }}</li>
             </ul>  
           </mat-expansion-panel>
-        </mat-accordion>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>
-  
-  
+    
   <!-- <h2>Parcelles</h2>
   <h2>Rangs en cultivation</h2>
   <h2>Rangs en jachère</h2>

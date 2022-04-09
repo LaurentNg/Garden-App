@@ -58,6 +58,7 @@ export class DatabaseService {
 	    harvestPeriod: variety.perioderecolte,
 	    comments: variety.comgen,
 	    version: variety.nomversion,
+      parcelCoords: variety.coordparcelle,
     }));
     return { basicInfo: basicInfo,  parcelInfo: parcelInfo, cultivateRankInfo: cultivateRankInfo, fallowRankInfo: fallowRankInfo, varietyInfo: varietyInfo };
   }
@@ -99,7 +100,7 @@ export class DatabaseService {
   public async getGardenVarietyInfos(): Promise<pg.QueryResult> {
     
     const client = await this.pool.connect();
-    const query = `SELECT v.idVariete, v.nom, v.anneeMiseEnMarche, v.descSemis, v.plantation, v.entretien, v.recolte, v.periodeMisePlace, v.periodeRecolte, v.comGen, v.nomVersion FROM JARDINCOMMUNDB.VarieteEnCultivation vc NATURAL JOIN JARDINCOMMUNDB.Variete v;`;
+    const query = `SELECT vc.coordParcelle, v.idVariete, v.nom, v.anneeMiseEnMarche, v.descSemis, v.plantation, v.entretien, v.recolte, v.periodeMisePlace, v.periodeRecolte, v.comGen, v.nomVersion FROM JARDINCOMMUNDB.VarieteEnCultivation vc NATURAL JOIN JARDINCOMMUNDB.Variete v;`;
     const res = await client.query(query);
     client.release()
     return res;
