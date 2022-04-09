@@ -1,0 +1,178 @@
+<div id="garden">
+  <h1>Jardins</h1>
+  
+  <div class="divider"></div>
+  <div id="parcel">
+    <h2>Parcelles</h2>
+    <table
+      id="ht"
+      align="center"
+      border="1"
+      width="1000"
+      class="table-striped table-hover"
+    >
+      <thead class="roomsheader">
+        <th class="contentCell">COORDONÉES</th>
+        <th class="contentCell">DIMENSIONS</th>
+      </thead>
+      <!-- <tbody>
+        <tr *ngFor="let room of rooms; let i = index">
+          <td class="contentCell">{{ room.hotelnb }}</td>
+          <td class="contentCell">{{ room.roomnb }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomType($event, i)">{{ room.type }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomPrice($event, i)">{{ room.price }}</td>
+          <td class="actionCell">
+            <button type="button" class="submitbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
+            <button type="button" class="deletebtn" (click)="deleteRoom(room.hotelnb, room.roomnb)">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </td>
+        </tr>
+  
+        <tr class="blank_row">
+          <td class="contentCell">{{selectedHotel.hotelnb}}</td>
+          <td class="contentCell" contenteditable="true" placeholder="New Number" #newRoomNb></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Type" #newRoomType></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Price" #newRoomPrice></td>
+          <td class="contentCell"></td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+  <div id="rank">
+    <h2>Rangs en cultivation</h2>
+    <table
+      id="ht"
+      align="center"
+      border="1"
+      width="1000"
+      class="table-striped table-hover"
+    >
+      <thead class="roomsheader">
+        <th class="contentCell">NUMÉRO DE RANG</th>
+        <th class="contentCell">COORDONÉES GÉOGRAPHIQUES</th>
+        <th class="contentCell">TYPE MISE EN PLACE</th>
+        <th class="contentCell">PÉRIODE DE CULTURE</th>
+        <th class="actionCell">ACTION</th>
+      </thead>
+      <!-- <tbody>
+        <tr *ngFor="let room of rooms; let i = index">
+          <td class="contentCell">{{ room.hotelnb }}</td>
+          <td class="contentCell">{{ room.roomnb }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomType($event, i)">{{ room.type }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomPrice($event, i)">{{ room.price }}</td>
+          <td class="actionCell">
+            <button type="button" class="submitbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
+            <button type="button" class="deletebtn" (click)="deleteRoom(room.hotelnb, room.roomnb)">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </td>
+        </tr>
+  
+        <tr class="blank_row">
+          <td class="contentCell">{{selectedHotel.hotelnb}}</td>
+          <td class="contentCell" contenteditable="true" placeholder="New Number" #newRoomNb></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Type" #newRoomType></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Price" #newRoomPrice></td>
+          <td class="contentCell"></td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+  <div id="rank">
+    <h2>Rangs en jachère</h2>
+    <table
+      id="ht"
+      align="center"
+      border="1"
+      width="1000"
+      class="table-striped table-hover"
+    >
+      <thead class="roomsheader">
+        <th class="contentCell">NUMÉRO DE RANG</th>
+        <th class="contentCell">COORDONÉES GÉOGRAPHIQUES</th>
+        <th class="contentCell">PÉRIODE EN JACHÈRE</th>
+        <th class="actionCell">ACTION</th>
+      </thead>
+
+      <!-- <tbody>
+        <tr *ngFor="let room of rooms; let i = index">
+          <td class="contentCell">{{ room.hotelnb }}</td>
+          <td class="contentCell">{{ room.roomnb }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomType($event, i)">{{ room.type }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomPrice($event, i)">{{ room.price }}</td>
+          <td class="actionCell">
+            <button type="button" class="submitbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
+            <button type="button" class="deletebtn" (click)="deleteRoom(room.hotelnb, room.roomnb)">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </td>
+        </tr>
+  
+        <tr class="blank_row">
+          <td class="contentCell">{{selectedHotel.hotelnb}}</td>
+          <td class="contentCell" contenteditable="true" placeholder="New Number" #newRoomNb></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Type" #newRoomType></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Price" #newRoomPrice></td>
+          <td class="contentCell"></td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+  <div id="varieties">
+    <h2>Variétés de plantes</h2>
+    <table
+      id="ht"
+      align="center"
+      border="1"
+      width="1000"
+      class="table-striped table-hover"
+    >
+      <thead class="roomsheader">
+        <th class="contentCell">NOM</th>
+        <th class="contentCell">ANNÉE MISE EN MARCHÉ</th>
+        <th class="contentCell">DESCRIPTIONS POUR LE SEMIS</th>
+        <th class="contentCell">PLANTATION</th>
+        <th class="contentCell">ENTRETIEN</th>
+        <th class="contentCell">RÉCOLTE</th>
+        <th class="contentCell">PÉRIODE DE MISE EN PLACE</th>
+        <th class="contentCell">PÉRIODE DE RÉCOLTE</th>
+        <th class="contentCell">COMMENTAIRES</th>
+        <th class="actionCell">ACTION</th>
+      </thead>
+      <!-- <tbody>
+        <tr *ngFor="let room of rooms; let i = index">
+          <td class="contentCell">{{ room.hotelnb }}</td>
+          <td class="contentCell">{{ room.roomnb }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomType($event, i)">{{ room.type }}</td>
+          <td class="contentCell" contenteditable="true" (blur)="changeRoomPrice($event, i)">{{ room.price }}</td>
+          <td class="actionCell">
+            <button type="button" class="submitbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
+            <button type="button" class="deletebtn" (click)="deleteRoom(room.hotelnb, room.roomnb)">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </td>
+        </tr>
+  
+        <tr class="blank_row">
+          <td class="contentCell">{{selectedHotel.hotelnb}}</td>
+          <td class="contentCell" contenteditable="true" placeholder="New Number" #newRoomNb></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Type" #newRoomType></td>
+          <td class="contentCell" contenteditable="true" placeholder="New Price" #newRoomPrice></td>
+          <td class="contentCell"></td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Self aware panel
+      </mat-panel-title>
+      <mat-panel-description>
+        Currently I am
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>I'm visible because I am open</p>
+  </mat-expansion-panel>
+</div>

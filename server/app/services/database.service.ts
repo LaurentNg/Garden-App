@@ -3,6 +3,7 @@ import * as pg from "pg";
 import "reflect-metadata";
 import { Room } from "../../../common/tables/Room";
 import { Hotel } from "../../../common/tables/Hotel";
+import { GardenInfo } from "../../../common/tables/GardenInfo";
 import { Gender, Guest } from "../../../common/tables/Guest";
 
 @injectable()
@@ -11,7 +12,7 @@ export class DatabaseService {
   // TODO: A MODIFIER POUR VOTRE BD
   public connectionConfig: pg.ConnectionConfig = {
     user: "postgres",
-    database: "hoteldb",
+    database: "garden",
     password: "admin",
     port: 5432,
     host: "127.0.0.1",
@@ -19,6 +20,91 @@ export class DatabaseService {
   };
 
   public pool: pg.Pool = new pg.Pool(this.connectionConfig);
+
+  // ======= GET GARDEN =======
+  public async getGardenInfos(): Promise<GardenInfo> {
+    
+    const basicInfo = (await this.getGardenInfo()).rows.map((garden) => ({
+      jardinId: garden.jardinid,
+      name: garden.nom,
+      surface: garden.surface,
+    }));
+    const parcelInfo = (await this.getGardenParcelInfos()).rows.map((parcel) => ({
+      jardinId: parcel.jardinid,
+      coordinates: parcel.coordparcelle,
+      dimensions: parcel.dimensions,
+    }));
+    const cultivateRankInfo = (await this.getGardenCultivateRankInfos()).rows.map((cultivateRank) => ({
+      coordinates: cultivateRank.coordparcelle, 
+      number: cultivateRank.numrang,
+      type: cultivateRank.typemiseplace,
+      period: cultivateRank.periodeculture,
+    }));
+    const fallowRankInfo = (await this.getGardenFallowRankInfos()).rows.map((fallowRank) => ({
+      coordinates: fallowRank.coordparcelle,
+      number: fallowRank.numrang,
+      period: fallowRank.periodejachere,
+    }));
+
+    const varietyInfo = (await this.getGardenVarietyInfos()).rows.map((variety) => ({
+      varietyId: variety.idvariete,
+	    name: variety.nom,
+	    year: variety.anneemiseenmarche,
+	    description: variety.descsemis,
+	    plantation: variety.plantation,
+	    maintenance: variety.entretien,
+	    harvest: variety.recolte,
+	    plantationPeriod: variety.periodemiseplace,
+	    harvestPeriod: variety.perioderecolte,
+	    comments: variety.comgen,
+	    version: variety.nomversion,
+    }));
+    return { basicInfo: basicInfo,  parcelInfo: parcelInfo, cultivateRankInfo: cultivateRankInfo, fallowRankInfo: fallowRankInfo, varietyInfo: varietyInfo };
+  }
+
+  public async getGardenInfo(): Promise<pg.QueryResult> {
+    
+    const client = await this.pool.connect();
+    const query = "SELECT * FROM JARDINCOMMUNDB.Jardin j;";
+    const res = await client.query(query);
+    client.release()
+    return res;
+  }
+
+  public async getGardenParcelInfos(): Promise<pg.QueryResult> {
+    
+    const client = await this.pool.connect();
+    const query = `SELECT p.coordParcelle, p.dimensions, p.jardinId FROM JARDINCOMMUNDB.Jardin j NATURAL JOIN JARDINCOMMUNDB.Parcelle p;`;
+    const res = await client.query(query);
+    client.release()
+    return res;
+  }
+  public async getGardenCultivateRankInfos(): Promise<pg.QueryResult> {
+    
+    const client = await this.pool.connect();
+    const query = `SELECT c.coordParcelle, c.numRang, c.typeMisePlace, c.periodeCulture FROM JARDINCOMMUNDB.Parcelle p NATURAL JOIN JARDINCOMMUNDB.Cultivation c;`;
+    const res = await client.query(query);
+    client.release()
+    return res;
+  }
+
+  public async getGardenFallowRankInfos(): Promise<pg.QueryResult> {
+    
+    const client = await this.pool.connect();
+    const query = `SELECT j.coordParcelle, j.numRang, j.periodeJachere FROM JARDINCOMMUNDB.Parcelle p NATURAL JOIN JARDINCOMMUNDB.Jachere j;`;
+    const res = await client.query(query);
+    client.release()
+    return res;
+  }
+  public async getGardenVarietyInfos(): Promise<pg.QueryResult> {
+    
+    const client = await this.pool.connect();
+    const query = `SELECT v.idVariete, v.nom, v.anneeMiseEnMarche, v.descSemis, v.plantation, v.entretien, v.recolte, v.periodeMisePlace, v.periodeRecolte, v.comGen, v.nomVersion FROM JARDINCOMMUNDB.VarieteEnCultivation vc NATURAL JOIN JARDINCOMMUNDB.Variete v;`;
+    const res = await client.query(query);
+    client.release()
+    return res;
+  }
+
 
   // ======= DEBUG =======
   public async getAllFromTable(tableName: string): Promise<pg.QueryResult> {

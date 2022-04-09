@@ -6,6 +6,8 @@
   },
   "exclude": [
     "test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "test.helper.ts",
+    "environments/environment.prod.ts"
   ]
 }

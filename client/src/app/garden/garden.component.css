@@ -1,0 +1,25 @@
+#garden {
+    background-color: var(--theme-background);
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    padding: 3%;
+}
+
+/* #parcel {
+    border: 1px solid black;
+} */
+
+.divider {
+    border-bottom: 1px solid var(--theme-blue);
+    margin: auto;
+    width: 50%;
+    margin-bottom: 25px;
+}
+
+h2 {
+    text-align: left;
+    margin: 2% auto 2% auto;
+    width: 74%;
+    background-color: var(--theme-blue);
+    
+}
