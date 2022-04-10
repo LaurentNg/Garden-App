@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Plant } from '../../../../common/tables/Plant';
 import { CommunicationService } from '../communication.service';
 
@@ -7,19 +9,17 @@ import { CommunicationService } from '../communication.service';
   templateUrl: './plant.component.html',
   styleUrls: ['./plant.component.css']
 })
-export class PlantComponent implements OnInit {
+export class PlantComponent {
+  @ViewChild('plantPaginator') plantPaginator: MatPaginator;
   plantName: string;
-  plants: Plant[];
+  plants: MatTableDataSource<Plant>;
   
   constructor(private communicationService: CommunicationService) { }
 
-  ngOnInit(): void {
-  }
-
   public searchPlant(plantName: string) {
-    console.log('here');
     this.communicationService.getPlant(plantName).subscribe((plants: Plant[]) => {
-      this.plants = plants;
+      this.plants = new MatTableDataSource<Plant>(plants);
+      this.plants.paginator = this.plantPaginator;
     });
   }
 }

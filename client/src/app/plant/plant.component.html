@@ -43,5 +43,6 @@
 
         <tr mat-header-row *matHeaderRowDef="['name', 'latinName', 'category', 'type', 'threatName', 'subtype']"></tr>
         <tr mat-row *matRowDef="let row; columns: ['name', 'latinName', 'category', 'type', 'threatName', 'subtype'];"></tr>
-      </table>
+    </table>
+    <mat-paginator #plantPaginator [pageSize]="1" showFirstLastButtons></mat-paginator>
 </div>

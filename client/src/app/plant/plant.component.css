@@ -22,7 +22,7 @@ button {
     background-color: rgb(164, 199, 199);
 }
 
-.table {
+.table, mat-paginator{
     background-color: rgb(255, 255, 255);
     width: 75%;
     margin: 0.5% auto 0.5% auto;    
