@@ -25,7 +25,7 @@ export class DatabaseController {
     // ======= GARDEN ROUTES =======
     router.get("/gardens", (req: Request, res: Response, _: NextFunction) => {
       this.databaseService
-        .getGardenInfo()
+        .getGardens()
         .then((result: pg.QueryResult) => {
           const basicInfo: Garden[] = result.rows.map((garden) => ({
             jardinId: garden.jardinid,

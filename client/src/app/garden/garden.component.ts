@@ -9,23 +9,6 @@ import { FallowRank } from '../../../../common/tables/FallowRank';
 import { Garden } from '../../../../common/tables/Garden';
 import { Variety } from '../../../../common/tables/Variety';
 
-
-
-// export interface Parcel {
-//   coordinates: string;
-//   dimensions: string;
-// }
-
-// export interface Rank {
-//   coordinates: string;
-//   dimensions: string;
-// }
-
-// export interface Garden {
-//   name: string;
-//   surface: string;
-// }
-
 // const ELEMENT_DATA: Parcel[] = [
 //   {coordinates: 'laval', dimensions: 'Hydrogen'},
 //   {coordinates: 'laval', dimensions: 'Helium'},
@@ -64,11 +47,6 @@ import { Variety } from '../../../../common/tables/Variety';
 //   {coordinates: 'laval', dimensions: 'Neon'},
 // ];
 
-// const GARDEN: Garden[] = [{
-//   name: 'botanique',
-//   surface: '1000 x 10000'
-// }]
-
 @Component({
   selector: 'app-garden',
   templateUrl: './garden.component.html',
@@ -81,11 +59,6 @@ export class GardenComponent implements OnInit {
 
   gardens: Garden[];
   selectedGardenId: number;
-  // parcel = new MatTableDataSource<Parcel>(ELEMENT_DATA);
-  // cultivateRank = new MatTableDataSource<Rank>(ELEMENT_DATA2);
-  // fallowRank = new MatTableDataSource<Rank>(ELEMENT_DATA2);
-  // garden = new MatTableDataSource<Garden>(GARDEN);
-
   garden: MatTableDataSource<Garden>;
   parcels: MatTableDataSource<Parcel>;
   cultivateRanks: MatTableDataSource<CultivateRank>;
@@ -101,11 +74,8 @@ export class GardenComponent implements OnInit {
   }
   
   public setGardenInfo() {
-    const selectedGarden = this.gardens.filter((garden: Garden) => {
-      return garden.jardinId == this.selectedGardenId;
-    });
-    this.garden = new MatTableDataSource<Garden>(selectedGarden);
     this.communicationService.getGardenInfos(this.selectedGardenId).subscribe((gardenInfo: GardenInfo) => {
+      this.garden = new MatTableDataSource<Garden>(gardenInfo.gardenInfo);
       this.parcels = new MatTableDataSource<Parcel>(gardenInfo.parcelInfo);
       this.cultivateRanks = new MatTableDataSource<CultivateRank>(gardenInfo.cultivateRankInfo);
       this.fallowRanks = new MatTableDataSource<FallowRank>(gardenInfo.fallowRankInfo);
@@ -114,27 +84,5 @@ export class GardenComponent implements OnInit {
       this.cultivateRanks.paginator = this.cultivateRankPaginator;
       this.fallowRanks.paginator = this.fallowRankPaginator;
     });
-
-    // const selectedParcels = this.gardenInfo.parcelInfo.filter((parcel: Parcel) => {
-    //   return parcel.jardinId == this.selectedGardenId;
-    // });
-
-    // const parcelCoordinates = selectedParcels.map((parcel: Parcel) => {
-    //   return parcel.coordinates;
-    // });
-
-    // const selectedCultivateRanks = this.gardenInfo.cultivateRankInfo.filter((cultivateRank: CultivateRank) => {
-    //   return parcelCoordinates.includes(cultivateRank.coordinates);
-    // });
-
-    // const selectedFallowRanks = this.gardenInfo.fallowRankInfo.filter((fallowRank: FallowRank) => {
-    //   return parcelCoordinates.includes(fallowRank.coordinates);
-    // });
-
-    // const selectedVarieties = this.gardenInfo.varietyInfo.filter((variety: Variety) => {
-    //   return parcelCoordinates.includes(variety.parcelCoords);
-    // });
-
   }
-
 }

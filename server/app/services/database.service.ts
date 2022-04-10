@@ -24,29 +24,32 @@ export class DatabaseService {
 
   // ======= GET GARDEN =======
   public async getGardenInfos(gardenId: number): Promise<GardenInfo> {
+    const gardenInfo = (await this.getGardenInfo(gardenId)).rows.map((garden) => ({
+      jardinId: garden.jardinid,
+      name: garden.nom,
+      surface: garden.surface,
+    }));
+
     const parcelInfo = (await this.getGardenParcelInfos(gardenId)).rows.map((parcel) => ({
       jardinId: parcel.jardinid,
       coordinates: parcel.coordparcelle,
       dimensions: parcel.dimensions,
     }));
 
-    const parcelCoords: string[] = parcelInfo.map((coord) => {
-      return coord.coordinates;
-    });
-
-    const cultivateRankInfo = (await this.getGardenCultivateRankInfos(parcelCoords)).rows.map((cultivateRank) => ({
+    const cultivateRankInfo = (await this.getGardenCultivateRankInfos(gardenId)).rows.map((cultivateRank) => ({
       coordinates: cultivateRank.coordparcelle, 
       number: cultivateRank.numrang,
       type: cultivateRank.typemiseplace,
       period: cultivateRank.periodeculture,
     }));
-    const fallowRankInfo = (await this.getGardenFallowRankInfos(parcelCoords)).rows.map((fallowRank) => ({
+    
+    const fallowRankInfo = (await this.getGardenFallowRankInfos(gardenId)).rows.map((fallowRank) => ({
       coordinates: fallowRank.coordparcelle,
       number: fallowRank.numrang,
       period: fallowRank.periodejachere,
     }));
 
-    const varietyInfo = (await this.getGardenVarietyInfos(parcelCoords)).rows.map((variety) => ({
+    const varietyInfo = (await this.getGardenVarietyInfos(gardenId)).rows.map((variety) => ({
       varietyId: variety.idvariete,
 	    name: variety.nom,
 	    year: variety.anneemiseenmarche,
@@ -60,11 +63,10 @@ export class DatabaseService {
 	    version: variety.nomversion,
       parcelCoords: variety.coordparcelle,
     }));
-    return { parcelInfo: parcelInfo, cultivateRankInfo: cultivateRankInfo, fallowRankInfo: fallowRankInfo, varietyInfo: varietyInfo };
+    return { gardenInfo: gardenInfo, parcelInfo: parcelInfo, cultivateRankInfo: cultivateRankInfo, fallowRankInfo: fallowRankInfo, varietyInfo: varietyInfo };
   }
 
-  public async getGardenInfo(): Promise<pg.QueryResult> {
-    
+  public async getGardens(): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
     const query = "SELECT * FROM JARDINCOMMUNDB.Jardin j;";
     const res = await client.query(query);
@@ -72,62 +74,45 @@ export class DatabaseService {
     return res;
   }
 
-  public async getGardenParcelInfos(gardenId: number): Promise<pg.QueryResult> {
-    
+  public async getGardenInfo(gardenId: number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const query = `SELECT p.coordParcelle, p.dimensions, p.jardinId FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}';`;
+    const query = `SELECT * FROM JARDINCOMMUNDB.Jardin WHERE jardinId = '${gardenId}';`;
     const res = await client.query(query);
     client.release()
     return res;
   }
-  public async getGardenCultivateRankInfos(parcelCoords: string[]): Promise<pg.QueryResult> {
 
-    const searchItems = parcelCoords.map((coord: string) => {
-      return `coordParcelle = '${coord}'`;
-    });
-
-    let res: pg.QueryResult = { rows: []} as unknown as pg.QueryResult;
-    if (searchItems.length > 0) {
-      let queryText = "SELECT * FROM JARDINCOMMUNDB.Cultivation";
-      queryText += " WHERE " + searchItems.join(" OR ") + ";";
-      const client = await this.pool.connect();
-      res = await client.query(queryText);
-      client.release()
-    }
+  public async getGardenParcelInfos(gardenId: number): Promise<pg.QueryResult> {
+    const client = await this.pool.connect();
+    const query = `SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}';`;
+    const res = await client.query(query);
+    client.release()
     return res;
   }
 
-  public async getGardenFallowRankInfos(parcelCoords: string[]): Promise<pg.QueryResult> {
-    
-    const searchItems = parcelCoords.map((coord: string) => {
-      return `coordParcelle = '${coord}'`;
-    });
-
-    let res: pg.QueryResult = { rows: []} as unknown as pg.QueryResult;
-    if (searchItems.length > 0) {
-      let queryText = "SELECT * FROM JARDINCOMMUNDB.Jachere";
-      queryText += " WHERE " + searchItems.join(" OR ") + ";";
-      const client = await this.pool.connect();
-      res = await client.query(queryText);
-      client.release()
-    }
+  public async getGardenCultivateRankInfos(gardenId: number): Promise<pg.QueryResult> {
+    let queryText = "SELECT * FROM JARDINCOMMUNDB.Cultivation c WHERE EXISTS ";
+    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}' AND c.coordParcelle = p.coordParcelle);`;
+    const client = await this.pool.connect();
+    const res = await client.query(queryText);
+    client.release()
     return res;
   }
-  public async getGardenVarietyInfos(parcelCoords: string[]): Promise<pg.QueryResult> {
-    
-    const searchItems = parcelCoords.map((coord: string) => {
-      return `coordParcelle = '${coord}'`;
-    });
 
-    let res: pg.QueryResult = { rows: []} as unknown as pg.QueryResult;
-    if (searchItems.length > 0) {
-      let queryText = "SELECT vc.coordParcelle, v.idVariete, v.nom, v.anneeMiseEnMarche, v.descSemis, v.plantation, v.entretien, v.recolte, v.periodeMisePlace, v.periodeRecolte, v.comGen, v.nomVersion FROM (JARDINCOMMUNDB.VarieteEnCultivation vc NATURAL JOIN JARDINCOMMUNDB.Variete v)";
-      queryText += " WHERE " + searchItems.join(" OR ") + ";";
-      const client = await this.pool.connect();
-      // const query = `SELECT vc.coordParcelle, v.idVariete, v.nom, v.anneeMiseEnMarche, v.descSemis, v.plantation, v.entretien, v.recolte, v.periodeMisePlace, v.periodeRecolte, v.comGen, v.nomVersion FROM (JARDINCOMMUNDB.VarieteEnCultivation vc NATURAL JOIN JARDINCOMMUNDB.Variete v) WHERE ;`;
-      res = await client.query(queryText);
-      client.release()
-    }
+  public async getGardenFallowRankInfos(gardenId: number): Promise<pg.QueryResult> {
+    let queryText = "SELECT * FROM JARDINCOMMUNDB.Jachere j WHERE EXISTS ";
+    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}' AND j.coordParcelle = p.coordParcelle);`;
+    const client = await this.pool.connect();
+    const res = await client.query(queryText);
+    client.release()
+    return res;
+  }
+  public async getGardenVarietyInfos(gardenId: number): Promise<pg.QueryResult> {
+    let queryText = "SELECT coordParcelle, idVariete, nom, anneeMiseEnMarche, descSemis, plantation, entretien, recolte, periodeMisePlace, periodeRecolte, comGen, nomVersion FROM (JARDINCOMMUNDB.VarieteEnCultivation NATURAL JOIN JARDINCOMMUNDB.Variete) v WHERE EXISTS ";
+    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}' AND v.coordParcelle = p.coordParcelle);`;
+    const client = await this.pool.connect();
+    const res = await client.query(queryText);
+    client.release()
     return res;
   }
 
