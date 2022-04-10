@@ -1,4 +1,5 @@
 <div id="plant">
+    <h1>Plantes</h1>
     <div class="divider"></div>
     <div class="container contentSelect">
         <div id="search-bar" class="input-group mb-3">
@@ -44,5 +45,4 @@
         <tr mat-header-row *matHeaderRowDef="['name', 'latinName', 'category', 'type', 'threatName', 'subtype']"></tr>
         <tr mat-row *matRowDef="let row; columns: ['name', 'latinName', 'category', 'type', 'threatName', 'subtype'];"></tr>
     </table>
-    <mat-paginator #plantPaginator [pageSize]="1" showFirstLastButtons></mat-paginator>
 </div>
