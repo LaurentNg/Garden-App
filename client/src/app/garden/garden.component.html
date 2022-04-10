@@ -166,7 +166,7 @@
         <label class="input-group-text" for="gardenSelect">Jardin</label>
       </div>
       <select class="custom-select" id="gardenSelect" [(ngModel)]="this.selectedGardenId" (change)="setGardenInfo()">
-        <option *ngFor="let garden of this.gardenInfo.basicInfo" [value]="garden.jardinId">{{ garden.name }}</option>
+        <option *ngFor="let garden of this.gardens" [value]="garden.jardinId">{{ garden.name }}</option>
       </select>
     </div>
   </div>

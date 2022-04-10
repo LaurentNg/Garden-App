@@ -79,7 +79,7 @@ export class GardenComponent implements OnInit {
   @ViewChild('cultivateRankPaginator') cultivateRankPaginator: MatPaginator;
   @ViewChild('fallowRankPaginator') fallowRankPaginator: MatPaginator;
 
-  gardenInfo: GardenInfo = {} as GardenInfo;
+  gardens: Garden[];
   selectedGardenId: number;
   // parcel = new MatTableDataSource<Parcel>(ELEMENT_DATA);
   // cultivateRank = new MatTableDataSource<Rank>(ELEMENT_DATA2);
@@ -95,44 +95,46 @@ export class GardenComponent implements OnInit {
   constructor(private communicationService: CommunicationService) { }
 
   ngOnInit() {
-    this.communicationService.getGardens().subscribe((gardenInfo: GardenInfo) => {
-      this.gardenInfo = gardenInfo;
+    this.communicationService.getGardens().subscribe((gardens: Garden[]) => {
+      this.gardens = gardens;
     });
   }
   
   public setGardenInfo() {
-    const selectedGarden = this.gardenInfo.basicInfo.filter((garden: Garden) => {
+    const selectedGarden = this.gardens.filter((garden: Garden) => {
       return garden.jardinId == this.selectedGardenId;
     });
-
-    const selectedParcels = this.gardenInfo.parcelInfo.filter((parcel: Parcel) => {
-      return parcel.jardinId == this.selectedGardenId;
-    });
-
-    const parcelCoordinates = selectedParcels.map((parcel: Parcel) => {
-      return parcel.coordinates;
-    });
-
-    const selectedCultivateRanks = this.gardenInfo.cultivateRankInfo.filter((cultivateRank: CultivateRank) => {
-      return parcelCoordinates.includes(cultivateRank.coordinates);
-    });
-
-    const selectedFallowRanks = this.gardenInfo.fallowRankInfo.filter((fallowRank: FallowRank) => {
-      return parcelCoordinates.includes(fallowRank.coordinates);
-    });
-
-    const selectedVarieties = this.gardenInfo.varietyInfo.filter((variety: Variety) => {
-      return parcelCoordinates.includes(variety.parcelCoords);
-    });
-
     this.garden = new MatTableDataSource<Garden>(selectedGarden);
-    this.parcels = new MatTableDataSource<Parcel>(selectedParcels);
-    this.cultivateRanks = new MatTableDataSource<CultivateRank>(selectedCultivateRanks);
-    this.fallowRanks = new MatTableDataSource<FallowRank>(selectedFallowRanks);
-    this.varieties = selectedVarieties;
-    this.parcels.paginator = this.parcelPaginator;
-    this.cultivateRanks.paginator = this.cultivateRankPaginator;
-    this.fallowRanks.paginator = this.fallowRankPaginator;
+    this.communicationService.getGardenInfos(this.selectedGardenId).subscribe((gardenInfo: GardenInfo) => {
+      this.parcels = new MatTableDataSource<Parcel>(gardenInfo.parcelInfo);
+      this.cultivateRanks = new MatTableDataSource<CultivateRank>(gardenInfo.cultivateRankInfo);
+      this.fallowRanks = new MatTableDataSource<FallowRank>(gardenInfo.fallowRankInfo);
+      this.varieties = gardenInfo.varietyInfo;
+      this.parcels.paginator = this.parcelPaginator;
+      this.cultivateRanks.paginator = this.cultivateRankPaginator;
+      this.fallowRanks.paginator = this.fallowRankPaginator;
+    });
+
+    // const selectedParcels = this.gardenInfo.parcelInfo.filter((parcel: Parcel) => {
+    //   return parcel.jardinId == this.selectedGardenId;
+    // });
+
+    // const parcelCoordinates = selectedParcels.map((parcel: Parcel) => {
+    //   return parcel.coordinates;
+    // });
+
+    // const selectedCultivateRanks = this.gardenInfo.cultivateRankInfo.filter((cultivateRank: CultivateRank) => {
+    //   return parcelCoordinates.includes(cultivateRank.coordinates);
+    // });
+
+    // const selectedFallowRanks = this.gardenInfo.fallowRankInfo.filter((fallowRank: FallowRank) => {
+    //   return parcelCoordinates.includes(fallowRank.coordinates);
+    // });
+
+    // const selectedVarieties = this.gardenInfo.varietyInfo.filter((variety: Variety) => {
+    //   return parcelCoordinates.includes(variety.parcelCoords);
+    // });
+
   }
 
 }

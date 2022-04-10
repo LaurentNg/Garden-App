@@ -6,8 +6,9 @@ import { catchError } from "rxjs/operators";
 import { Hotel } from "../../../common/tables/Hotel";
 import { Room } from "../../../common/tables/Room";
 import { HotelPK } from "../../../common/tables/HotelPK";
-import { GardenInfo } from "../../../common/tables/GardenInfo";
 import { Guest } from "../../../common/tables/Guest";
+import { Garden } from "../../../common/tables/Garden";
+import { GardenInfo } from "../../../common/tables/GardenInfo";
 
 
 @Injectable()
@@ -25,10 +26,16 @@ export class CommunicationService {
     this._listners.next(filterBy);
   }
 
-  public getGardens(): Observable<GardenInfo> {
+  public getGardens(): Observable<Garden[]> {
     return this.http
-      .get<GardenInfo>(this.BASE_URL + "/gardens")
-      .pipe(catchError(this.handleError<GardenInfo>("getGardens")));
+      .get<Garden[]>(this.BASE_URL + "/gardens")
+      .pipe(catchError(this.handleError<Garden[]>("getGardens")));
+  }
+
+  public getGardenInfos(gardenId: number): Observable<GardenInfo> {
+    return this.http
+      .get<GardenInfo>(this.BASE_URL + `/garden/info?gardenId=${gardenId}`)
+      .pipe(catchError(this.handleError<GardenInfo>("getGardenInfos")));
   }
 
   public getHotels(): Observable<Hotel[]> {

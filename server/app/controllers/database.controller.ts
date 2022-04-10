@@ -10,6 +10,7 @@ import { Guest } from "../../../common/tables/Guest";
 import { DatabaseService } from "../services/database.service";
 import Types from "../types";
 import { GardenInfo } from "../../../common/tables/GardenInfo";
+import { Garden } from "../../../common/tables/Garden";
 
 @injectable()
 export class DatabaseController {
@@ -23,7 +24,25 @@ export class DatabaseController {
     // ======= GARDEN ROUTES =======
     router.get("/gardens", (req: Request, res: Response, _: NextFunction) => {
       this.databaseService
-        .getGardenInfos()
+        .getGardenInfo()
+        .then((result: pg.QueryResult) => {
+          const basicInfo: Garden[] = result.rows.map((garden) => ({
+            jardinId: garden.jardinid,
+            name: garden.nom,
+            surface: garden.surface,
+          }));
+          res.json(basicInfo);
+        })
+        .catch((e: Error) => {
+          console.error(e.stack);
+        });
+    });
+
+    router.get("/garden/info", (req: Request, res: Response, _: NextFunction) => {
+      const gardenId = req.query.gardenId ? req.query.gardenId : "";
+
+      this.databaseService
+        .getGardenInfos(gardenId)
         .then((result: GardenInfo) => {
           res.json(result);
         })
