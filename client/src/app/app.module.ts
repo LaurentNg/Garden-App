@@ -13,9 +13,7 @@ import { GardenComponent } from './garden/garden.component';
 import { MaterialExampleModule } from "./material.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from "@angular/material/core";
-
-
-
+import { PlantComponent } from './plant/plant.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +22,7 @@ import { MatNativeDateModule } from "@angular/material/core";
     HotelComponent,
     GuestComponent,
     GardenComponent,
+    PlantComponent,
   ],
   imports: [
     CommonModule,

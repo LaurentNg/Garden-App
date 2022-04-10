@@ -1,0 +1,47 @@
+<div id="plant">
+    <div class="divider"></div>
+    <div class="container contentSelect">
+        <div id="search-bar" class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="plantSearch">Plante</label>
+          </div>
+          <input (keydown.enter)="searchPlant(plantName)" type="text" id="plantSearch" [(ngModel)]="plantName" placeholder="Search..">
+          <button (click)="searchPlant(plantName)"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <table mat-table id="garden-info" [dataSource]="plants" class="table">  
+
+        <ng-container matColumnDef="name">
+          <th class="data" mat-header-cell *matHeaderCellDef> Nom </th>
+          <td class="data" mat-cell *matCellDef="let plant"> {{plant.name}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="latinName">
+          <th class="data" mat-header-cell *matHeaderCellDef> Nom latin </th>
+          <td class="data" mat-cell *matCellDef="let plant"> {{plant.latinName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th class="data" mat-header-cell *matHeaderCellDef> Catégorie </th>
+          <td class="data" mat-cell *matCellDef="let plant"> {{plant.category}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th class="data" mat-header-cell *matHeaderCellDef> Type </th>
+          <td class="data" mat-cell *matCellDef="let plant"> {{plant.type}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="threatName">
+          <th class="data" mat-header-cell *matHeaderCellDef> Menace </th>
+          <td class="data" mat-cell *matCellDef="let plant"> {{plant.threatName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="subtype">
+          <th class="data" mat-header-cell *matHeaderCellDef> Sous-type </th>
+          <td class="data" mat-cell *matCellDef="let plant"> {{plant.subtype}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['name', 'latinName', 'category', 'type', 'threatName', 'subtype']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'latinName', 'category', 'type', 'threatName', 'subtype'];"></tr>
+      </table>
+</div>

@@ -8,6 +8,7 @@ import { Room } from "../../../common/tables/Room";
 import { HotelPK } from "../../../common/tables/HotelPK";
 import { Guest } from "../../../common/tables/Guest";
 import { Garden } from "../../../common/tables/Garden";
+import { Plant } from "../../../common/tables/Plant";
 import { GardenInfo } from "../../../common/tables/GardenInfo";
 
 
@@ -36,6 +37,12 @@ export class CommunicationService {
     return this.http
       .get<GardenInfo>(this.BASE_URL + `/garden/info?gardenId=${gardenId}`)
       .pipe(catchError(this.handleError<GardenInfo>("getGardenInfos")));
+  }
+
+  public getPlant(plantName: string): Observable<Plant[]> {
+    return this.http
+      .get<Plant[]>(this.BASE_URL + `/plant?plantName=${plantName}`)
+      .pipe(catchError(this.handleError<Plant[]>("getPlant")));
   }
 
   public getHotels(): Observable<Hotel[]> {

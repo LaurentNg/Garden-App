@@ -11,6 +11,7 @@ import { DatabaseService } from "../services/database.service";
 import Types from "../types";
 import { GardenInfo } from "../../../common/tables/GardenInfo";
 import { Garden } from "../../../common/tables/Garden";
+import { Plant } from "../../../common/tables/Plant";
 
 @injectable()
 export class DatabaseController {
@@ -44,6 +45,19 @@ export class DatabaseController {
       this.databaseService
         .getGardenInfos(gardenId)
         .then((result: GardenInfo) => {
+          res.json(result);
+        })
+        .catch((e: Error) => {
+          console.error(e.stack);
+        });
+    });
+
+    router.get("/plant", (req: Request, res: Response, _: NextFunction) => {
+      const plantName = req.query.plantName ? req.query.plantName : "";
+
+      this.databaseService
+        .getPlantInfo(plantName)
+        .then((result: Plant[]) => {
           res.json(result);
         })
         .catch((e: Error) => {

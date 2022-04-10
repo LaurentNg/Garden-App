@@ -18,9 +18,6 @@ mat-expansion-panel, .table, mat-paginator, mat-tab-group {
     width: 30%;
     margin-bottom: 25px;
 }
-/* ::ng-deep .mat-tab-label {
-    margin: auto;
-} */
 
 mat-tab-group {
     padding: 5% 0% 5% 0%;
@@ -47,11 +44,6 @@ mat-panel-title, .data {
 li {
     list-style-type: none;
 }
-
-/* #parcel {
-    border: 1px solid black;
-} */
-
 
 .divider {
     border-bottom: 1px solid var(--theme-blue);

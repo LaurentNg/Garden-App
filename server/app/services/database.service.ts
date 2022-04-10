@@ -5,6 +5,7 @@ import { Room } from "../../../common/tables/Room";
 import { Hotel } from "../../../common/tables/Hotel";
 import { GardenInfo } from "../../../common/tables/GardenInfo";
 import { Gender, Guest } from "../../../common/tables/Guest";
+import { Plant } from "../../../common/tables/Plant";
 
 @injectable()
 export class DatabaseService {
@@ -130,6 +131,26 @@ export class DatabaseService {
     return res;
   }
 
+  // ======= PLANT =======
+  public async getPlantInfo(plantName: string): Promise<Plant[]> {
+    
+    const client = await this.pool.connect();
+    const query = `SELECT * FROM JARDINCOMMUNDB.Plante WHERE nom LIKE '%${plantName}%';`;
+    const res = await client.query(query);
+    client.release()
+    const plantsInfo = res.rows.map((plant) => ({
+      id: plant.ipdlante, 
+	    name: plant.nom,
+	    latinName: plant.nomlatin,
+	    category: plant.categorie,
+	    type: plant.ptype,
+	    threatName: plant.nommenace,
+	    subtype: plant.psoustype,
+	    jardinId: plant.jardinid,
+	    varietyId: plant.idvariete, 
+    }));
+    return plantsInfo;
+  }
 
   // ======= DEBUG =======
   public async getAllFromTable(tableName: string): Promise<pg.QueryResult> {
