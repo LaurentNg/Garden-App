@@ -1,0 +1,82 @@
+#variety {
+    background-color: var(--theme-background);
+    font-family: 'Roboto', sans-serif;
+    padding: 3%;
+    text-align: center;
+}
+
+.divider {
+    border-bottom: 1px solid var(--theme-blue);
+    margin: auto;
+    width: 50%;
+    margin-bottom: 25px;
+}
+
+h1 {
+    text-align: center;
+    margin: 2% auto 2% auto;
+    width: 75%;
+    background-color: var(--theme-blue);
+}
+
+.form-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin: 2% auto 2% auto;
+    width: 75%;
+    text-align: right;
+}
+
+.form-container > div {
+    /* padding: 40px 40px 0 40px; */
+    margin-right: 10%;
+}
+
+.form {
+    margin: 2% 0;
+}
+
+input, textarea, select {
+    background-color: white;
+    height: 2em;
+}
+
+.form-container > form {
+    margin-right: 12%;
+}
+
+.form-container > form:nth-child(3), 
+.form-container > form:nth-child(4){
+    margin-top: 3%;
+}
+
+label {
+    margin-right: 3%;
+}
+
+select {
+    width: 42%;
+}
+
+.btn {
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--theme-blue);
+    margin: auto;
+    color: white;
+    font-size: 25px;
+    font-weight: 800;
+    font-family: 'Varela Round', sans-serif;
+}
+
+input.ng-invalid.ng-dirty, select.ng-invalid.ng-dirty {
+    background-color:rgb(229, 107, 127);
+}
+
+::placeholder {
+    color: rgb(98, 98, 143);
+}
+
+#insert-message {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}

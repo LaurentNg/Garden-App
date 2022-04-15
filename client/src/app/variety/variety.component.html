@@ -1,0 +1,101 @@
+<div id="variety">
+    <h1>Ajouter une variété de plante</h1>
+    <div class="divider"></div>
+    <div class="form-container">
+        <div class="form">
+            <mat-card-title>Nom de la variété : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput required maxlength="20" type="text" [(ngModel)]="variety.name" placeholder="Ex. Arbustes" />
+                <mat-hint align="end">{{ variety.name?.length || 0 }}/20</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title >Année de mise en marché : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput minlength="4" maxlength="4" min="2000" type="number" [(ngModel)]="variety.year" placeholder="Ex. 2019" />
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title>Description pour le semis : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput required maxlength="50" type="text" [(ngModel)]="variety.description" placeholder="Ex. Le semis..." />
+                <mat-hint align="end">{{ variety.description?.length || 0 }}/50</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title>Plantation : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput required maxlength="50" type="text" [(ngModel)]="variety.plantation" placeholder="Ex. La plantation..." />
+                <mat-hint align="end">{{ variety.plantation?.length || 0 }}/50</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title>Entretien : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput required maxlength="50" type="text" [(ngModel)]="variety.maintenance" placeholder="Ex. L'entretien..." />
+                <mat-hint align="end">{{ variety.maintenance?.length || 0 }}/50</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title>Récolte : </mat-card-title>
+            <mat-form-field required appearance="fill">
+                <input matInput required maxlength="50" type="text" [(ngModel)]="variety.harvest" placeholder="Ex. La récolte..." />
+                <mat-hint align="end">{{ variety.harvest?.length || 0 }}/50</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title >Période de mise en place : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput required min="1" type="number" [(ngModel)]="variety.plantationPeriod" placeholder="Ex. 40" />
+            </mat-form-field>
+        </div>
+        <div class="form">
+            <mat-card-title >Période de récolte : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <input matInput required min="1" type="number" [(ngModel)]="variety.harvestPeriod" placeholder="Ex. 60" />
+            </mat-form-field>
+        </div>
+      
+        
+        <div class="form">
+            <mat-card-title>Commentaires(facultatif) : </mat-card-title>
+            <mat-form-field appearance="fill">
+                <textarea name="comments" matInput maxlength="250"  [(ngModel)]="variety.comments" placeholder="Ex. Cette variété..."></textarea>               
+                <mat-hint align="end">{{ variety.comments?.length || 0 }}/250</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <form appearance="fill">
+            <label for="adaptation">Niveau d'adaptation : </label>
+            <select required name="adaptation" [(ngModel)]="variety.adaptation">
+                <option value="option1">Élevé</option>
+                <option value="option2">Moyen</option>
+                <option value="option3">Faible</option>
+            </select>
+        </form>
+        <form appearance="fill">
+            <label for="soilType">Type de sol : </label>
+            <select required name="soilType" [(ngModel)]="variety.soilType">
+                <option  *ngFor="let soilType of this.soilTypes" [value]="soilType.name">{{ soilType.name}}</option>
+            </select>
+        </form>
+        <form appearance="fill">
+            <label for="seedmanName">Nom du semencier : </label>
+            <select required name="seedmanName" [(ngModel)]="variety.seedmanName">
+                <option  *ngFor="let seedMan of this.seedMen" [value]="seedMan.webSite">{{ seedMan.name}}</option>
+            </select>
+        </form>
+        <form>
+            <label for="version">Version : </label>
+            <select required name="version" [(ngModel)]="variety.version">
+                <option value="bio">bio</option>
+                <option value="nonBio">nonBio</option>
+            </select>
+        </form>
+    </div>
+    <p #insertMessage id="insert-message"></p>
+    <button type="button" class="btn" [disabled]="disableButton()" (click)="insertVariety()">+</button>
+    <p>{{ variety | json }}</p>
+</div>

@@ -1,0 +1,29 @@
+<div id="variety">
+    <h1>Variétés</h1>
+    <div class="divider"></div>
+    <div class="variety-container" *ngFor="let variety of varieties; let i = index">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+                <p (keypress)="isLetterKeyPress($event, 20)" contenteditable="true" (blur)="change($event, i, 'name')">{{ variety.name }}</p>
+                <button type="button" class="submitbtn" (click)="updateVariety(i)"> <i class="fa fa-edit"></i></button>
+                <button type="button" class="deletebtn" (click)="deleteVariety(variety.varietyId)"><i class="fa fa-trash-o"></i></button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul>
+            <li>Année de mise en marché : <p (keypress)="isNumberKeyPress($event)" (blur)="change($event, i, 'year')" contenteditable="true">{{ variety.year }}</p></li>
+            <li>Description pour le semis : <p (keypress)="isLetterKeyPress($event, 50)" contenteditable="true" (blur)="change($event, i, 'description')">{{ variety.description }}</p></li>
+            <li>Plantation : <p (keypress)="isLetterKeyPress($event, 50)" contenteditable="true" (blur)="change($event, i, 'plantation')">{{ variety.plantation }}</p></li>
+            <li>Entretien : <p (keypress)="isLetterKeyPress($event, 50)" contenteditable="true" (blur)="change($event, i, 'maintenance')">{{ variety.maintenance }}</p></li>
+            <li>Récolte : <p (keypress)="isLetterKeyPress($event, 50)" contenteditable="true" (blur)="change($event, i, 'harvest')">{{ variety.harvest }}</p></li>
+            <li>Période de mise en place : <p (keypress)="isNumberKeyPress($event)" contenteditable="true" (blur)="change($event, i, 'plantationPeriod')">{{ variety.plantationPeriod }}</p></li>
+            <li>Période de récolte : <p (keypress)="isNumberKeyPress($event)" contenteditable="true" (blur)="change($event, i, 'harvestPeriod')">{{ variety.harvestPeriod }}</p></li>
+            <li>Type de sol : <p>{{ variety.soilType }}</p></li>
+            <li>Niveau d'adaptation : <p>{{ variety.adaptation }}</p></li>
+            <li>Version : <p (keypress)="isLetterKeyPress($event, 20)" contenteditable="true" (blur)="change($event, i, 'version')">{{ variety.version }}</p></li>
+            <li>Semencier : <p>{{ variety.seedmanName }}</p></li>
+            <li>Commentaires : <p (keypress)="commentMaxLength($event)" contenteditable="true" (blur)="change($event, i, 'comments')">{{ variety.comments }}</p></li>
+          </ul>  
+        </mat-expansion-panel>
+    </div>
+</div>

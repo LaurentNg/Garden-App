@@ -9,44 +9,6 @@ import { FallowRank } from '../../../../common/tables/FallowRank';
 import { Garden } from '../../../../common/tables/Garden';
 import { Variety } from '../../../../common/tables/Variety';
 
-// const ELEMENT_DATA: Parcel[] = [
-//   {coordinates: 'laval', dimensions: 'Hydrogen'},
-//   {coordinates: 'laval', dimensions: 'Helium'},
-//   {coordinates: 'laval', dimensions: 'Lithium'},
-//   {coordinates: 'laval', dimensions: 'Beryllium'},
-//   {coordinates: 'laval', dimensions: 'Boron'},
-//   {coordinates: 'laval', dimensions: 'Carbon'},
-//   {coordinates: 'laval', dimensions: 'Nitrogen'},
-//   {coordinates: 'laval', dimensions: 'Oxygen'},
-//   {coordinates: 'laval', dimensions: 'Fluorine'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-// ];
-
-// const ELEMENT_DATA2: Rank[] = [
-//   {coordinates: 'laval', dimensions: 'Hydrogen'},
-//   {coordinates: 'laval', dimensions: 'Helium'},
-//   {coordinates: 'laval', dimensions: 'Lithium'},
-//   {coordinates: 'laval', dimensions: 'Beryllium'},
-//   {coordinates: 'laval', dimensions: 'Boron'},
-//   {coordinates: 'laval', dimensions: 'Carbon'},
-//   {coordinates: 'laval', dimensions: 'Nitrogen'},
-//   {coordinates: 'laval', dimensions: 'Oxygen'},
-//   {coordinates: 'laval', dimensions: 'Fluorine'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-//   {coordinates: 'laval', dimensions: 'Neon'},
-// ];
-
 @Component({
   selector: 'app-garden',
   templateUrl: './garden.component.html',
@@ -70,11 +32,13 @@ export class GardenComponent implements OnInit {
   ngOnInit() {
     this.communicationService.getGardens().subscribe((gardens: Garden[]) => {
       this.gardens = gardens;
+      console.log(gardens);
     });
   }
   
   public setGardenInfo() {
     this.communicationService.getGardenInfos(this.selectedGardenId).subscribe((gardenInfo: GardenInfo) => {
+      console.log(gardenInfo);
       this.garden = new MatTableDataSource<Garden>(gardenInfo.gardenInfo);
       this.parcels = new MatTableDataSource<Parcel>(gardenInfo.parcelInfo);
       this.cultivateRanks = new MatTableDataSource<CultivateRank>(gardenInfo.cultivateRankInfo);

@@ -1,16 +1,15 @@
 import { injectable } from "inversify";
 import * as pg from "pg";
 import "reflect-metadata";
-import { Room } from "../../../common/tables/Room";
-import { Hotel } from "../../../common/tables/Hotel";
 import { GardenInfo } from "../../../common/tables/GardenInfo";
-import { Gender, Guest } from "../../../common/tables/Guest";
 import { Plant } from "../../../common/tables/Plant";
+import { Variety } from "../../../common/tables/Variety";
+import { Seedman } from "../../../common/tables/Seedman";
+import { SoilType } from "../../../common/tables/SoilType";
 
 @injectable()
 export class DatabaseService {
 
-  // TODO: A MODIFIER POUR VOTRE BD
   public connectionConfig: pg.ConnectionConfig = {
     user: "postgres",
     database: "garden",
@@ -25,13 +24,13 @@ export class DatabaseService {
   // ======= GET GARDEN =======
   public async getGardenInfos(gardenId: number): Promise<GardenInfo> {
     const gardenInfo = (await this.getGardenInfo(gardenId)).rows.map((garden) => ({
-      jardinId: garden.jardinid,
+      jardinId: garden.idjardin,
       name: garden.nom,
       surface: garden.surface,
     }));
 
     const parcelInfo = (await this.getGardenParcelInfos(gardenId)).rows.map((parcel) => ({
-      jardinId: parcel.jardinid,
+      jardinId: parcel.idjardin,
       coordinates: parcel.coordparcelle,
       dimensions: parcel.dimensions,
     }));
@@ -62,6 +61,9 @@ export class DatabaseService {
 	    comments: variety.comgen,
 	    version: variety.nomversion,
       parcelCoords: variety.coordparcelle,
+      soilType: variety.nomtypesol,
+      adaptation: variety.niveau,
+      seedmanName: variety.nomsemencier,
     }));
     return { gardenInfo: gardenInfo, parcelInfo: parcelInfo, cultivateRankInfo: cultivateRankInfo, fallowRankInfo: fallowRankInfo, varietyInfo: varietyInfo };
   }
@@ -76,7 +78,7 @@ export class DatabaseService {
 
   public async getGardenInfo(gardenId: number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const query = `SELECT * FROM JARDINCOMMUNDB.Jardin WHERE jardinId = '${gardenId}';`;
+    const query = `SELECT * FROM JARDINCOMMUNDB.Jardin WHERE idJardin = '${gardenId}';`;
     const res = await client.query(query);
     client.release()
     return res;
@@ -84,7 +86,7 @@ export class DatabaseService {
 
   public async getGardenParcelInfos(gardenId: number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const query = `SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}';`;
+    const query = `SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.idJardin = '${gardenId}';`;
     const res = await client.query(query);
     client.release()
     return res;
@@ -92,7 +94,7 @@ export class DatabaseService {
 
   public async getGardenCultivateRankInfos(gardenId: number): Promise<pg.QueryResult> {
     let queryText = "SELECT * FROM JARDINCOMMUNDB.Cultivation c WHERE EXISTS ";
-    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}' AND c.coordParcelle = p.coordParcelle);`;
+    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.idJardin = '${gardenId}' AND c.coordParcelle = p.coordParcelle);`;
     const client = await this.pool.connect();
     const res = await client.query(queryText);
     client.release()
@@ -101,15 +103,16 @@ export class DatabaseService {
 
   public async getGardenFallowRankInfos(gardenId: number): Promise<pg.QueryResult> {
     let queryText = "SELECT * FROM JARDINCOMMUNDB.Jachere j WHERE EXISTS ";
-    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}' AND j.coordParcelle = p.coordParcelle);`;
+    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.idJardin = '${gardenId}' AND j.coordParcelle = p.coordParcelle);`;
     const client = await this.pool.connect();
     const res = await client.query(queryText);
     client.release()
     return res;
   }
   public async getGardenVarietyInfos(gardenId: number): Promise<pg.QueryResult> {
-    let queryText = "SELECT coordParcelle, idVariete, nom, anneeMiseEnMarche, descSemis, plantation, entretien, recolte, periodeMisePlace, periodeRecolte, comGen, nomVersion FROM (JARDINCOMMUNDB.VarieteEnCultivation NATURAL JOIN JARDINCOMMUNDB.Variete) v WHERE EXISTS ";
-    queryText += `(SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.jardinId = '${gardenId}' AND v.coordParcelle = p.coordParcelle);`;
+    let queryText = "SELECT coordParcelle, v.idVariete, v.nom, anneeMiseEnMarche, descSemis, plantation, entretien, recolte, periodeMisePlace, periodeRecolte, comGen, nomVersion, nomTypeSol, niveau, s.nom as nomSemencier "
+    queryText += "FROM (JARDINCOMMUNDB.VarieteEnCultivation NATURAL JOIN JARDINCOMMUNDB.Variete NATURAL JOIN JARDINCOMMUNDB.VarieteProduction NATURAL JOIN JARDINCOMMUNDB.Adaptation NATURAL JOIN JARDINCOMMUNDB.TypeSol) v, JARDINCOMMUNDB.Semencier s WHERE v.siteWeb = s.siteWeb AND ";
+    queryText += `EXISTS (SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.idJardin = '${gardenId}' AND v.coordParcelle = p.coordParcelle);`;
     const client = await this.pool.connect();
     const res = await client.query(queryText);
     client.release()
@@ -120,10 +123,10 @@ export class DatabaseService {
   public async getPlantInfo(plantName: string): Promise<Plant[]> {
     
     const client = await this.pool.connect();
-    const query = `SELECT * FROM JARDINCOMMUNDB.Plante WHERE nom LIKE '%${plantName}%';`;
+    const query = `SELECT idPlante, p.nom, nomLatin, categorie, pType, m.nom as nomMenace, pSousType, idJardin, idVariete FROM JARDINCOMMUNDB.Plante p, JARDINCOMMUNDB.Menace m WHERE p.idMenace = m.idMenace AND p.nom LIKE '%${plantName}%';`;
     const res = await client.query(query);
     client.release()
-    const plantsInfo = res.rows.map((plant) => ({
+    const plantsInfo: Plant[] = res.rows.map((plant) => ({
       id: plant.ipdlante, 
 	    name: plant.nom,
 	    latinName: plant.nomlatin,
@@ -131,237 +134,113 @@ export class DatabaseService {
 	    type: plant.ptype,
 	    threatName: plant.nommenace,
 	    subtype: plant.psoustype,
-	    jardinId: plant.jardinid,
+	    jardinId: plant.idjardin,
 	    varietyId: plant.idvariete, 
     }));
     return plantsInfo;
   }
 
-  // ======= DEBUG =======
-  public async getAllFromTable(tableName: string): Promise<pg.QueryResult> {
-    
+  // ======= VARIETY =======
+  public async getVarieties(): Promise<Variety[]> {
     const client = await this.pool.connect();
-    const res = await client.query(`SELECT * FROM HOTELDB.${tableName};`);
-    client.release()
-    return res;
-  }
-
-
-  // ======= HOTEL =======
-  public async createHotel(hotel: Hotel): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-
-    if (!hotel.hotelnb || !hotel.name || !hotel.city)
-      throw new Error("Invalid create hotel values");
-
-    const values: string[] = [hotel.hotelnb, hotel.name, hotel.city];
-    const queryText: string = `INSERT INTO HOTELDB.Hotel VALUES($1, $2, $3);`;
-
-    const res = await client.query(queryText, values);
-    client.release()
-    return res;
-  }
-
-
-  // get hotels that correspond to certain caracteristics
-  public async filterHotels(hotelNb: string, hotelName: string, city: string): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-
-    const searchTerms: string[] = [];
-    if (hotelNb.length > 0) searchTerms.push(`hotelNb = '${hotelNb}'`);
-    if (hotelName.length > 0) searchTerms.push(`name = '${hotelName}'`);
-    if (city.length > 0) searchTerms.push(`city = '${city}'`);
-
-    let queryText = "SELECT * FROM HOTELDB.Hotel";
-    if (searchTerms.length > 0) queryText += " WHERE " + searchTerms.join(" AND ");
-    queryText += ";";
-
+    let queryText = "SELECT v.idVariete, v.nom, anneeMiseEnMarche, descSemis, plantation, entretien, recolte, periodeMisePlace, periodeRecolte, comGen, nomVersion, nomTypeSol, niveau, s.nom as nomSemencier ";
+    queryText += "FROM (JARDINCOMMUNDB.Variete NATURAL JOIN JARDINCOMMUNDB.VarieteProduction NATURAL JOIN JARDINCOMMUNDB.Adaptation NATURAL JOIN JARDINCOMMUNDB.TypeSol) v, JARDINCOMMUNDB.Semencier s WHERE v.siteWeb = s.siteWeb;";
     const res = await client.query(queryText);
     client.release()
-    return res;
+    const varieties: Variety[] = res.rows.map((variety) => ({
+      varietyId: variety.idvariete,
+	    name: variety.nom,
+	    year: variety.anneemiseenmarche,
+	    description: variety.descsemis,
+	    plantation: variety.plantation,
+	    maintenance: variety.entretien,
+	    harvest: variety.recolte,
+	    plantationPeriod: variety.periodemiseplace,
+	    harvestPeriod: variety.perioderecolte,
+	    comments: variety.comgen,
+	    version: variety.nomversion,
+      parcelCoords: variety.coordparcelle,
+      soilType: variety.nomtypesol,
+      adaptation: variety.niveau,
+      seedmanName: variety.nomsemencier,
+    }));
+    return varieties;
   }
 
-
-  // get the hotel names and numbers so so that the user can only select an existing hotel
-  public async getHotelNamesByNos(): Promise<pg.QueryResult> {
+  public async createVariety(variety: Variety): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const res = await client.query("SELECT hotelNb, name FROM HOTELDB.Hotel;");
+    
+    if (!variety.name.length || !variety.year.toString().length || !variety.description.length || !variety.plantation.length || !variety.maintenance.length 
+        || !variety.harvest.length || !variety.plantationPeriod.toString().length || !variety.harvestPeriod.toString().length || !variety.version.length 
+        || !variety.soilType.length || !variety.adaptation.length || !variety.seedmanName.length)
+      throw new Error("Invalid create hotel values");
+
+    const values: string[] = [variety.varietyId.toString(), variety.name, variety.year.toString(), variety.description, variety.plantation, variety.maintenance, variety.harvest, variety.plantationPeriod.toString(), variety.harvestPeriod.toString(), variety.comments];
+    const queryVariety: string = `INSERT INTO JARDINCOMMUNDB.Variete VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
+    const res = await client.query(queryVariety, values);
+    const queryAdaptation: string = `INSERT INTO JARDINCOMMUNDB.Adaptation VALUES('${variety.varietyId}', '${variety.soilType}', '${variety.adaptation}');`;
+    const queryVarietyProduction: string = `INSERT INTO JARDINCOMMUNDB.VarieteProduction VALUES('${variety.varietyId}', '${variety.seedmanName}', '${variety.version}');`;
+    await client.query(queryAdaptation);
+    await client.query(queryVarietyProduction);
     client.release()
     return res;
   }
 
+  public async deleteVariety(varietyId: number): Promise<pg.QueryResult> {
+    if (varietyId.toString().length === 0) throw new Error("Invalid delete query");
+    const client = await this.pool.connect();
+    const query = `DELETE FROM JARDINCOMMUNDB.Variete WHERE idVariete = '${varietyId}';`;
+    const res = await client.query(query);
+    client.release()
+    return res;
+  }
 
-  // modify name or city of a hotel
-  public async updateHotel(hotel: Hotel): Promise<pg.QueryResult> {
+  public async updateVariety(variety: Variety): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
 
     let toUpdateValues = [];
   
-    if (hotel.name.length > 0) toUpdateValues.push(`name = '${hotel.name}'`);
-    if (hotel.city.length > 0) toUpdateValues.push(`city = '${hotel.city}'`);
+    if (variety.name.length > 0) toUpdateValues.push(`nom = '${variety.name}'`);
+    if (variety.year.toString().length > 0) toUpdateValues.push(`anneeMiseEnMarche = '${variety.year}'`);
+    if (variety.description.length > 0) toUpdateValues.push(`descSemis = '${variety.description}'`);
+    if (variety.plantation.length > 0) toUpdateValues.push(`plantation = '${variety.plantation}'`);
+    if (variety.maintenance.length > 0) toUpdateValues.push(`entretien = '${variety.maintenance}'`);
+    if (variety.harvest.length > 0) toUpdateValues.push(`recolte = '${variety.harvest}'`);
+    if (variety.plantationPeriod.toString().length > 0) toUpdateValues.push(`periodeMisePlace = '${variety.plantationPeriod}'`);
+    if (variety.harvestPeriod.toString().length > 0) toUpdateValues.push(`periodeRecolte = '${variety.harvestPeriod}'`);
+    if (variety.comments.length > 0) toUpdateValues.push(`comGen = '${variety.comments}'`);
 
-    if (!hotel.hotelnb || hotel.hotelnb.length === 0 || toUpdateValues.length === 0)
+    if (!variety.varietyId || variety.varietyId.toString().length === 0 || toUpdateValues.length === 0)
       throw new Error("Invalid hotel update query");
 
-    const query = `UPDATE HOTELDB.Hotel SET ${toUpdateValues.join(", ")} WHERE hotelNb = '${hotel.hotelnb}';`;
+    const query = `UPDATE JARDINCOMMUNDB.Variete SET ${toUpdateValues.join(", ")} WHERE idVariete = '${variety.varietyId}';`;
     const res = await client.query(query);
     client.release()
     return res;
   }
 
-
-  public async deleteHotel(hotelNb: string): Promise<pg.QueryResult> {
-    if (hotelNb.length === 0) throw new Error("Invalid delete query");
-    
-    
+  // ======= Seedman =======
+  public async getSeedmen(): Promise<Seedman[]> {
     const client = await this.pool.connect();
-    const query = `DELETE FROM HOTELDB.Hotel WHERE hotelNb = '${hotelNb}';`;
-
+    const query = "SELECT * FROM JARDINCOMMUNDB.Semencier;";
     const res = await client.query(query);
+    const seedMen: Seedman[] = res.rows.map((seedMan) => ({
+      webSite: seedMan.siteweb,
+	    name: seedMan.nom,
+    }));
     client.release()
-    return res;
+    return seedMen;
   }
 
-
-  // ======= ROOMS =======
-  public async createRoom(room: Room): Promise<pg.QueryResult> {
+  // ======= SoilType =======
+  public async getSoilTypes(): Promise<SoilType[]> {
     const client = await this.pool.connect();
-
-    if (!room.roomnb || !room.hotelnb || !room.type || !room.price)
-      throw new Error("Invalid create room values");
-
-    const values: string[] = [
-      room.roomnb,
-      room.hotelnb,
-      room.type,
-      room.price.toString(),
-    ];
-    const queryText: string = `INSERT INTO HOTELDB.ROOM VALUES($1, $2, $3, $4);`;
-
-    const res = await client.query(queryText, values);
-    client.release()
-    return res;
-  }
-
-
-  public async filterRooms(
-    hotelNb: string,
-    roomNb: string = "",
-    roomType: string = "",
-    price: number = -1
-    ): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-
-    if (!hotelNb || hotelNb.length === 0) throw new Error("Invalid filterRooms request");
-    
-    let searchTerms = [];
-    searchTerms.push(`hotelNb = '${hotelNb}'`);
-
-    if (roomNb.length > 0) searchTerms.push(`hotelNb = '${hotelNb}'`);
-    if (roomType.length > 0) searchTerms.push(`type = '${roomType}'`);
-    if (price >= 0) searchTerms.push(`price = ${price}`);
-
-    let queryText = `SELECT * FROM HOTELDB.Room WHERE ${searchTerms.join(" AND ")};`;
-    const res = await client.query(queryText);
-    client.release()
-    return res;
-  }
-
-
-  public async updateRoom(room: Room): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-
-    let toUpdateValues = [];
-    if (room.price >= 0) toUpdateValues.push(`price = ${room.price}`);
-    if (room.type.length > 0)
-      toUpdateValues.push(`type = '${room.type}'`);
-
-    if (!room.hotelnb ||
-      room.hotelnb.length === 0 ||
-      !room.roomnb ||
-      room.roomnb.length === 0 ||
-      toUpdateValues.length === 0
-    ) throw new Error("Invalid room update query");
-
-    const query = `UPDATE HOTELDB.Room SET ${toUpdateValues.join(
-    ", "
-    )} WHERE hotelNb = '${room.hotelnb}' AND roomNb = '${room.roomnb}';`;
+    const query = "SELECT * FROM JARDINCOMMUNDB.TypeSol;";
     const res = await client.query(query);
+    const soilTypes: SoilType[] = res.rows.map((soilType) => ({
+	    name: soilType.nomtypesol,
+    }));
     client.release()
-    return res;
-  }
-
-
-  public async deleteRoom(hotelNb: string, roomNb: string): Promise<pg.QueryResult> {
-    if (hotelNb.length === 0) throw new Error("Invalid room delete query");
-    const client = await this.pool.connect();
-
-    const query = `DELETE FROM HOTELDB.Room WHERE hotelNb = '${hotelNb}' AND roomNb = '${roomNb}';`;
-    const res = await client.query(query);
-    client.release()
-    return res;
-  }
-
-
-  // ======= GUEST =======
-  public async createGuest(guest: Guest): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-    if (
-      !guest.guestnb ||
-      !guest.nas ||
-      !guest.name ||
-      !guest.gender ||
-      !guest.city
-    ) throw new Error("Invalid create room values");
-
-    if (!(guest.gender in Gender)) throw new Error("Unknown guest gender passed");
-
-    const values: string[] = [
-      guest.guestnb,
-      guest.nas,
-      guest.name,
-      guest.gender,
-      guest.city,
-    ];
-    const queryText: string = `INSERT INTO HOTELDB.Guest VALUES($1, $2, $3, $4, $5);`;
-    const res = await client.query(queryText, values);
-    client.release()
-    return res;
-  }
-
-
-  public async getGuests(hotelNb: string, roomNb: string): Promise<pg.QueryResult> {
-    if (!hotelNb || hotelNb.length === 0) throw new Error("Invalid guest hotel no");
-    
-    const client = await this.pool.connect();
-    const queryExtension = roomNb ? ` AND b.roomNb = '${roomNb}'` : "";
-    const query: string = `SELECT * FROM HOTELDB.Guest g JOIN HOTELDB.Booking b ON b.guestNb = g.guestNb WHERE b.hotelNb = '${hotelNb}'${queryExtension};`;
-
-    const res = await client.query(query);
-    client.release()
-    return res;
-  }
-
-  // ======= BOOKING =======
-  public async createBooking(
-    hotelNb: string,
-    guestNo: string,
-    dateFrom: Date,
-    dateTo: Date,
-    roomNb: string
-  ): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-    const values: string[] = [
-      hotelNb,
-      guestNo,
-      dateFrom.toString(),
-      dateTo.toString(),
-      roomNb,
-    ];
-    const queryText: string = `INSERT INTO HOTELDB.ROOM VALUES($1,$2,$3,$4,$5);`;
-
-    const res = await client.query(queryText, values);
-    client.release()
-    return res;
+    return soilTypes;
   }
 }

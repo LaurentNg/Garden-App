@@ -11,4 +11,7 @@ export interface Variety {
     comments: string;
     version: string;
     parcelCoords: string;
+    soilType: string;
+    adaptation: string;
+    seedmanName: string;
 }
