@@ -7,7 +7,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CommunicationService } from "./communication.service";
 import { GardenComponent } from './garden/garden.component';
-import { MaterialExampleModule } from "./material.module";
+import { MaterialModule } from "./material.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from "@angular/material/core";
 import { PlantComponent } from './plant/plant.component';
@@ -27,7 +27,7 @@ import { ModifyVarietyComponent } from './modify-variety/modify-variety.componen
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    MaterialExampleModule,
+    MaterialModule,
     AppRoutingModule,
     MatNativeDateModule,
     BrowserAnimationsModule,

@@ -22,4 +22,4 @@ import { MatInputModule } from '@angular/material/input';
     providers: [],
 
   })
-  export class MaterialExampleModule {}
+  export class MaterialModule {}

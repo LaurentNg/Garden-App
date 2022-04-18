@@ -25,17 +25,17 @@ body {
     text-align: center;
 }
 
-.hotel1 {
+.garden1 {
     color: var(--theme-purple);
     font-family: 'Varela Round', sans-serif;
 }
 
-.hotel2 {
+.garden2 {
     color: var(--theme-blue);
     font-family: 'Varela Round', sans-serif;
 }
 
-.hotel3 {
+.garden3 {
     color: var(--theme-lightblue);
     font-family: 'Varela Round', sans-serif;
 }
