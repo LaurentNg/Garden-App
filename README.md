@@ -18,15 +18,18 @@
 
 - Allez dans `/client` et faites `npm start`​
 
-## Demo Screenshots (remove for actual readme)
-
+## Captures d'écran
+### Page des jardin
 ![Gardens Page](./imgs/jardin1.PNG "Gardens Page")
 ![Gardens Page](./imgs/jardin2.PNG "Gardens Page")
+### Page des plantes
 ![Plants Page](./imgs/plante1.PNG "Plants Page")
 ![Plants Page](./imgs/plante2.PNG "Plants Page")
+### Page des variétés
 ![Varieties Page](./imgs/variete1.PNG "Varieties Page")
 ![Varieties Page](./imgs/variete2.PNG "Varieties Page")
 ![Varieties Page](./imgs/variete3.PNG "Varieties Page")
+### Page de l'ajout d'une variété
 ![Add Variety Page](./imgs/ajoutvariete1.PNG "Add Variety Page")
 ![Add Variety Page](./imgs/ajoutvariete2.PNG "Add Variety Page")
 ![Add Variety Page](./imgs/ajoutvariete3.PNG "Add Variety Page")
