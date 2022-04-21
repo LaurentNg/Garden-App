@@ -11,7 +11,7 @@ import { MaterialModule } from "./material.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from "@angular/material/core";
 import { PlantComponent } from './plant/plant.component';
-import { VarietyComponent } from './variety/variety.component';
+import { AddVarietyComponent } from './variety/add-variety.component';
 import { ModifyVarietyComponent } from './modify-variety/modify-variety.component';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { ModifyVarietyComponent } from './modify-variety/modify-variety.componen
     AppComponent,
     GardenComponent,
     PlantComponent,
-    VarietyComponent,
+    AddVarietyComponent,
     ModifyVarietyComponent,
   ],
   imports: [

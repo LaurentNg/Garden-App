@@ -3,14 +3,14 @@ import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { GardenComponent } from "./garden/garden.component";
 import { PlantComponent } from "./plant/plant.component";
-import { VarietyComponent } from "./variety/variety.component";
+import { AddVarietyComponent } from "./variety/add-variety.component";
 import { ModifyVarietyComponent } from "./modify-variety/modify-variety.component";
 
 const routes: Routes = [
   { path: "app", component: AppComponent },
   { path: "garden", component: GardenComponent },
   { path: "plant", component: PlantComponent },
-  { path: "variety", component: VarietyComponent },
+  { path: "variety", component: AddVarietyComponent },
   { path: "modify-variety", component: ModifyVarietyComponent },
 ];
 

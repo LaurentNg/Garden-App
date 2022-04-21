@@ -15,8 +15,8 @@ export class ModifyVarietyComponent implements OnInit {
 
   ngOnInit(): void {
     this.getVarieties();
-    console.log(this.varieties);
   }
+  
   public change(event: any, index: number, attribute: never) {
     this.varieties[index][attribute] = event.target.textContent as never;
     event.target.textContent = this.varieties[index][attribute];

@@ -5,11 +5,11 @@ import { SoilType } from '../../../../common/tables/SoilType';
 import { CommunicationService } from '../communication.service';
 
 @Component({
-  selector: 'app-variety',
-  templateUrl: './variety.component.html',
-  styleUrls: ['./variety.component.css']
+  selector: 'app-add-variety',
+  templateUrl: './add-variety.component.html',
+  styleUrls: ['./add-variety.component.css']
 })
-export class VarietyComponent implements OnInit {
+export class AddVarietyComponent implements OnInit {
   @ViewChild('insertMessage', { static: false }) insertMessage: ElementRef;
 
 

@@ -32,13 +32,11 @@ export class GardenComponent implements OnInit {
   ngOnInit() {
     this.communicationService.getGardens().subscribe((gardens: Garden[]) => {
       this.gardens = gardens;
-      console.log(gardens);
     });
   }
   
   public setGardenInfo() {
     this.communicationService.getGardenInfos(this.selectedGardenId).subscribe((gardenInfo: GardenInfo) => {
-      console.log(gardenInfo);
       this.garden = new MatTableDataSource<Garden>(gardenInfo.gardenInfo);
       this.parcels = new MatTableDataSource<Parcel>(gardenInfo.parcelInfo);
       this.cultivateRanks = new MatTableDataSource<CultivateRank>(gardenInfo.cultivateRankInfo);
