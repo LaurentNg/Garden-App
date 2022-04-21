@@ -5,7 +5,7 @@
 
 - Assurez-vous que Postgres roule sur vos machines 
 
-- Allez dans Postgres et créer une base de donnée nommée `garden` et faire rouler les scripts sql
+- Allez dans Postgres et créer une base de donnée nommée `garden` et faire rouler les scripts sql. Assurez-vous aussi que dans pgAdmin qu’il y a l’utilisateur « postgres » avec le mot de passe « admin ».
 
 - Allez dans `/client`  et lancez `npm install`
 
