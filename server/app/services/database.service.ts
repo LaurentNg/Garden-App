@@ -123,7 +123,9 @@ export class DatabaseService {
   public async getPlantInfo(plantName: string): Promise<Plant[]> {
     
     const client = await this.pool.connect();
-    const query = `SELECT idPlante, p.nom, nomLatin, categorie, pType, m.nom as nomMenace, pSousType, idJardin, idVariete FROM JARDINCOMMUNDB.Plante p, JARDINCOMMUNDB.Menace m WHERE p.idMenace = m.idMenace AND p.nom LIKE '%${plantName}%';`;
+    const query = `SELECT p.idPlante, p.nom, nomLatin, categorie, pType, m.nom as nomMenace, pSousType, idJardin, idVariete from JARDINCOMMUNDB.Plante p LEFT OUTER JOIN JARDINCOMMUNDB.PlanteMenace pm
+    ON (p.idPlante = pm.idPlante) LEFT OUTER JOIN JARDINCOMMUNDB.Menace m ON (m.idMenace = pm.idMenace) WHERE p.nom LIKE '%${plantName}%';
+    `;
     const res = await client.query(query);
     client.release()
     const plantsInfo: Plant[] = res.rows.map((plant) => ({
