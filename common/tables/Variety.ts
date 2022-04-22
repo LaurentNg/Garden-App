@@ -10,7 +10,6 @@ export interface Variety {
     harvestPeriod: number;
     comments: string;
     version: string;
-    parcelCoords: string;
     soilType: string;
     adaptation: string;
     seedmanName: string;

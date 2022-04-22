@@ -60,7 +60,6 @@ export class DatabaseService {
 	    harvestPeriod: variety.perioderecolte,
 	    comments: variety.comgen,
 	    version: variety.nomversion,
-      parcelCoords: variety.coordparcelle,
       soilType: variety.nomtypesol,
       adaptation: variety.niveau,
       seedmanName: variety.nomsemencier,
@@ -110,7 +109,7 @@ export class DatabaseService {
     return res;
   }
   public async getGardenVarietyInfos(gardenId: number): Promise<pg.QueryResult> {
-    let queryText = "SELECT coordParcelle, v.idVariete, v.nom, anneeMiseEnMarche, descSemis, plantation, entretien, recolte, periodeMisePlace, periodeRecolte, comGen, nomVersion, nomTypeSol, niveau, s.nom as nomSemencier "
+    let queryText = "SELECT DISTINCT v.idVariete, v.nom, anneeMiseEnMarche, descSemis, plantation, entretien, recolte, periodeMisePlace, periodeRecolte, comGen, nomVersion, nomTypeSol, niveau, s.nom as nomSemencier "
     queryText += "FROM (JARDINCOMMUNDB.VarieteEnCultivation NATURAL JOIN JARDINCOMMUNDB.Variete NATURAL JOIN JARDINCOMMUNDB.VarieteProduction NATURAL JOIN JARDINCOMMUNDB.Adaptation NATURAL JOIN JARDINCOMMUNDB.TypeSol) v, JARDINCOMMUNDB.Semencier s WHERE v.siteWeb = s.siteWeb AND ";
     queryText += `EXISTS (SELECT * FROM JARDINCOMMUNDB.Parcelle p WHERE p.idJardin = '${gardenId}' AND v.coordParcelle = p.coordParcelle);`;
     const client = await this.pool.connect();
@@ -161,7 +160,6 @@ export class DatabaseService {
 	    harvestPeriod: variety.perioderecolte,
 	    comments: variety.comgen,
 	    version: variety.nomversion,
-      parcelCoords: variety.coordparcelle,
       soilType: variety.nomtypesol,
       adaptation: variety.niveau,
       seedmanName: variety.nomsemencier,
