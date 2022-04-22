@@ -11,7 +11,7 @@ import { MaterialModule } from "./material.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from "@angular/material/core";
 import { PlantComponent } from './plant/plant.component';
-import { AddVarietyComponent } from './variety/add-variety.component';
+import { AddVarietyComponent } from './add-variety/add-variety.component';
 import { ModifyVarietyComponent } from './modify-variety/modify-variety.component';
 
 @NgModule({

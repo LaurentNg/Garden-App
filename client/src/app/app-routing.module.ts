@@ -3,7 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { GardenComponent } from "./garden/garden.component";
 import { PlantComponent } from "./plant/plant.component";
-import { AddVarietyComponent } from "./variety/add-variety.component";
+import { AddVarietyComponent } from "./add-variety/add-variety.component";
 import { ModifyVarietyComponent } from "./modify-variety/modify-variety.component";
 
 const routes: Routes = [
