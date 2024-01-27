@@ -1,7 +1,7 @@
 # Garden App
 ## Description
 
-This is a simple and fun project that I've created to learn PostgresSQL. The client side was implemented using Angular framework, the backend was implemented with Typescript and the DB is PostgreSQL. 
+This is a simple and fun project that I've created to learn PostgresSQL. The project is about making queries to the DB from an web app to get and manipulate infos about plants 🪴! The client side was implemented using Angular framework, the backend was implemented with Typescript and the DB is PostgreSQL. 
 
 ⚠️ I did not provide the DB, therefore no data will be shown.
 
