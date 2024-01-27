@@ -1,24 +1,26 @@
-# Application web
-## Guide de démarrage du projet
+# Garden App
+## Description
 
-- Avoir installé la version 16 de NodeJS
+This is a simple and fun project that I've created to learn PostgresSQL. The client side was implemented using Angular framework, the backend was implemented with Typescript and the DB is PostgreSQL. 
 
-- Assurez-vous que Postgres roule sur vos machines 
+⚠️ I did not provide the DB, therefore no data will be shown.
 
-- Allez dans Postgres et créer une base de donnée nommée `garden` et faire rouler les scripts sql. Assurez-vous aussi que dans pgAdmin qu’il y a l’utilisateur « postgres » avec le mot de passe « admin ».
+## Project Startup Guide
 
-- Allez dans `/client`  et lancez `npm install --force`
+- Have installed version 16 of NodeJS
 
-- Allez dans `/server` et lancez `npm install​`
+- Go to `/client` and run `npm install`
+
+- Go to `/server` and run `npm install`
 
 
 ## Pour lancer le projet
 
-- Allez dans `/server` et faites `npm start`​
+- Go to `/server` and run `npm start`​
 
-- Allez dans `/client` et faites `npm start`​
+- Go to `/client` and run `npm start`​
 
-## Captures d'écran
+<!-- ## Captures d'écran
 ### Page des jardins
 ![Gardens Page](./imgs/jardin1.PNG "Gardens Page")
 ![Gardens Page](./imgs/jardin2.PNG "Gardens Page")
@@ -36,4 +38,4 @@
 ![Add Variety Page](./imgs/ajoutvariete1.PNG "Add Variety Page")
 ![Add Variety Page](./imgs/ajoutvariete2.PNG "Add Variety Page")
 ![Add Variety Page](./imgs/ajoutvariete3.PNG "Add Variety Page")
-![Add Variety Page](./imgs/ajoutvariete4.PNG "Add Variety Page")
+![Add Variety Page](./imgs/ajoutvariete4.PNG "Add Variety Page") -->
